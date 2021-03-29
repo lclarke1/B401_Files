@@ -9,28 +9,35 @@
 # 2. Install &Load required Packages & Import Data
 # 3. Run calculation
 # 4. Export to csv
+
 #######################################################################################
 #######################################################################################
 
 #Section 1: File Set up before running script
 #Copy viral regions .fna files to a folder
 #Create a single file named X_Eukaryotic_Region.fasta containing a set of large eukaryotic contigs
-#Copy X_Eukaryotic_Region.fasta to the viral regions folder
+#Copy X_Eukaryotic_Region.fasta to the viral regions folder 
+#The eukaryotic region files has a prefix of X so that it will be the last file in the folder
 
 #######################################################################################
 #######################################################################################
 
 # 2. Install &Load required Packages & Import Data
-#    The TetSocTNF is essentially a matrix containing the TNF for all viral regions
+#    The TNF_Set is essentially a matrix containing the TNF for all viral regions
 
 install.packages("biostrings")
 
 library(Biostrings)
  vRegions<-list.files(path="C:\\Users\\USERNAME\\FOLDERNAME", full.names=TRUE)
  files <- open_input_files(vRegions)
- TetSoc<-readDNAStringSet(files)
- TetSocTNF <- oligonucleotideFrequency(TetSoc,4, step=300)
- TetSocTNF[1,]                                                
+ DNA_Set<-readDNAStringSet(files)
+ TNF_Set <- oligonucleotideFrequency(DNA_Set,4,step=4)
+ TNF_Set[1,]                                                
+ print(length(files))
+ size <- length(files)
+ 
+ res <- cor.test(TNF_Set[1,], TNF_Set[size, ], method = "pearson")
+ print(res)                                           
 
 #######################################################################################
 #######################################################################################
@@ -41,19 +48,18 @@ library(Biostrings)
 #          Example
 #          If you have 10 viral regions, and the eukarotic region file is the 11th file
 #          The for loop range will be 1:10 and all entries that reference region 93 become 11. 
-
 pearson<-0
-for(i in 1:92){
-        pearson[i] <-   sum (   (TetSocTNF[i,] - mean(TetSocTNF[i,])) * (TetSocTNF[93,] - mean(TetSocTNF[93,]))  ) / 
-        sqrt (   sum ( (TetSocTNF[i,] - mean(TetSocTNF[i,])) * (TetSocTNF[i,] - mean(TetSocTNF[i,])) ) *  
-                         sum ( (TetSocTNF[93,] - mean(TetSocTNF[93,])) * (TetSocTNF[93,] - mean(TetSocTNF[93,])) )    ) 
+for(i in 1:(size-1)){
+        pearson[i] <-   sum (   (TNF_Set[i,] - mean(TNF_Set[i,])) * (TNF_Set[size,] - mean(TNF_Set[size,]))  ) / 
+        sqrt (   sum ( (TNF_Set[i,] - mean(TNF_Set[i,])) * (TNF_Set[i,] - mean(TNF_Set[i,])) ) *  
+                         sum ( (TNF_Set[size,] - mean(TNF_Set[size,])) * (TNF_Set[size,] - mean(TNF_Set[size,])) )    ) 
        
         con <- file(vRegions[i],"r")
         first_line <- readLines(con,n=1)
         close(con)
 
         names(pearson)[i]<-paste0(first_line)
-        print(pearson[i]) 
+       # print(pearson[i]) 
         
 }
 
