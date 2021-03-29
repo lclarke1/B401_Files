@@ -17,7 +17,7 @@
 #Copy viral regions .fna files to a folder
 #Create a single file named X_Eukaryotic_Region.fasta containing a set of large eukaryotic contigs
 #Copy X_Eukaryotic_Region.fasta to the viral regions folder 
-#The eukaryotic region files has a prefix of X so that it will be the last file in the folder
+#The eukaryotic region file has a prefix of X so that it will be the last file in the folder
 
 #######################################################################################
 #######################################################################################
@@ -37,8 +37,8 @@ library(Biostrings)
  size <- length(files)
  
 
-# cor is a built in fn for finding pearson correlation
-# It could be used in the main loop instead of the long form with some minor adjustments
+# cor is a built in function for finding pearson correlation
+# It could be used in the main loop instead of the long pearson calculation
 # Its included here just as a sanity check to confirm the long pearson calc is correct
  res <- cor(TNF_Set[1,], TNF_Set[size, ], method = "pearson")
  print(res)                                           
@@ -46,12 +46,7 @@ library(Biostrings)
 #######################################################################################
 #######################################################################################
 # 3. Run calculation
-#    Note: You will need to adjust the calculation range.
-#          The upper range of the for loop will be the number of viral regions in the folder
-#          The index here for file 93 is referring to the eukaryotic regions file
-#          Example
-#          If you have 10 viral regions, and the eukarotic region file is the 11th file
-#          The for loop range will be 1:10 and all entries that reference region 93 become 11. 
+#     
 pearson<-0
 for(i in 1:(size-1)){
         pearson[i] <-   sum (   (TNF_Set[i,] - mean(TNF_Set[i,])) * (TNF_Set[size,] - mean(TNF_Set[size,]))  ) / 
