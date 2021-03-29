@@ -36,6 +36,9 @@ library(Biostrings)
  print(length(files))
  size <- length(files)
  
+# this is a built in fn for finding pearson correlation
+# We call it just once as a santity check to confirm the pearson calculation is correct
+# It would've been used for the loop of all the files but the output format is not ideal
  res <- cor.test(TNF_Set[1,], TNF_Set[size, ], method = "pearson")
  print(res)                                           
 
@@ -68,7 +71,7 @@ for(i in 1:(size-1)){
 # 4. Export sorted results to csv
 
 sPearson <-sort(pearson)
-print(sPearson)
+print(pearson)
 write.table(sPearson, file = "C:\\Users\\USERNAME\\FOLDERNAME\\Output\\output.csv", col.names=FALSE)
 
 #######################################################################################
