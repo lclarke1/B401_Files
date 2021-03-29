@@ -36,10 +36,11 @@ library(Biostrings)
  print(length(files))
  size <- length(files)
  
-# this is a built in fn for finding pearson correlation
-# We call it just once as a santity check to confirm the pearson calculation is correct
-# It would've been used for the loop of all the files but the output format is not ideal
- res <- cor.test(TNF_Set[1,], TNF_Set[size, ], method = "pearson")
+
+# cor is a built in fn for finding pearson correlation
+# It could be used in the main loop instead of the long form with some minor adjustments
+# Its included here just as a sanity check to confirm the long pearson calc is correct
+ res <- cor(TNF_Set[1,], TNF_Set[size, ], method = "pearson")
  print(res)                                           
 
 #######################################################################################
